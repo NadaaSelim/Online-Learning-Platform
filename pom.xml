@@ -13,6 +13,7 @@
     <module>authentication</module>
     <module>eureka-server</module>
     <module>CourseManagement</module>
+    <module>Student</module>
   </modules>
 
   <properties>

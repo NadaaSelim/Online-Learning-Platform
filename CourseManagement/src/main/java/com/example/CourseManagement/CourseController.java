@@ -16,6 +16,10 @@ public class CourseController {
         this.courserepo = courserepo;
     }
 
+    @GetMapping("")
+    public List<Course> getCourses() {
+        return courserepo.findAll();
+    }
     @PostMapping("/add")
     public Course addCourse(@RequestBody Course course) {
         return courserepo.save(course);
