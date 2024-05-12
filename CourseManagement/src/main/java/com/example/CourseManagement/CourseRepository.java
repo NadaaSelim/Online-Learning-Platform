@@ -2,6 +2,7 @@ package com.example.CourseManagement;
 
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 @Repository
 public interface CourseRepository extends MongoRepository<Course, String> {
 
-    public List<Course> findCoursesByNameContainingIgnoreCase(String name);
+    List<Course> findCoursesByNameContainingIgnoreCase(String name);
     @Aggregation(pipeline = {
             "{ $unwind: '$reviewList' }",
             "{ $group: { _id: '$_id', averageRating: { $avg: '$reviewList.rating' } } }",
@@ -18,4 +19,10 @@ public interface CourseRepository extends MongoRepository<Course, String> {
     })
     List<Course> findAllByOrderByAverageRatingDesc();
     List<Course> findByCategory(Category name);
+
+    boolean existsByIdAndStudentsId(String courseId, String studentId);
+    //Student findByIdAndStudentsId(String courseId, String studentId);
+    int countStudentsByIdAndStudentsStatus(String courseId, Status status);
+    boolean existsByIdAndStudentsIdAndStudentsStatus(String courseId, String studentId,Status status);
+    //void removeByIdAndStudentsId(String courseId,String studentId);
 }

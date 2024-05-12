@@ -22,8 +22,8 @@ public class Course {
     private String name;
     private Instructor instructor;
     private int duration;       //duration in HOURS
-    int capacity;
-    Category category;
+    private int capacity;
+    private  Category category;
     private List<Student> students = new ArrayList<>();
-    private List<Review> reviewList = new ArrayList<>();
+
 }
