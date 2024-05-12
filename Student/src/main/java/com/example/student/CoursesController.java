@@ -22,6 +22,4 @@ public class CoursesController {
         return courseService.getAllCourses();
     }
 
-
-
 }

@@ -14,6 +14,7 @@
     <module>eureka-server</module>
     <module>CourseManagement</module>
     <module>Student</module>
+    <module>kafka</module>
   </modules>
 
   <properties>
