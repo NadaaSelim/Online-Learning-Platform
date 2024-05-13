@@ -1,4 +1,4 @@
-package com.example.CourseManagement;
+package com.example.CourseManagement.model;
 
 public enum Status {
     PENDING,ACCEPTED,REJECTED}

@@ -1,5 +1,8 @@
 package com.example.CourseManagement;
 
+import com.example.CourseManagement.model.Review;
+import com.example.CourseManagement.model.Status;
+import com.example.CourseManagement.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,23 +46,6 @@ public class CourseController {
     @GetMapping("/all")
     public List<Course> getCoursesByRating() {
         return courserepo.findAllByOrderByAverageRatingDesc();
-    }
-
-    @PostMapping("/enroll/{courseid}/{studentid}")
-    public String addStudentToCourse(@PathVariable("courseid") String courseid, @PathVariable("studentid") String studentid) {
-        Course course = courserepo.findById(courseid).orElseThrow(() -> new RuntimeException("Course not found"));
-        // int EnrolledNums = courserepo.countAcceptedStudentsInCourse(courseid);
-        int EnrolledNums = courserepo.countStudentsByIdAndStudentsStatus(courseid, Status.ACCEPTED);
-        if (courserepo.existsByIdAndStudentsId(courseid, studentid))
-            return "You have already requested for enrollment";
-        if (EnrolledNums >= course.getCapacity()) {
-            return ("Course is already full");
-        }
-        Student student = new Student();
-        student.setId(studentid);
-        course.getStudents().add(student);
-        courserepo.save(course);
-        return "You have been added to the enrollment Waiting List.";
     }
 
     @DeleteMapping("/cancel/{courseid}/{studentid}")

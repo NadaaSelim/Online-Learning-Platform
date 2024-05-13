@@ -43,7 +43,12 @@ public class CourseService {
     }
 
     public void enrollCourse(Enrollment enrollment) throws JsonProcessingException {
-        String data = enrollment.toString();
+        String data = new ObjectMapper().writeValueAsString(enrollment);
         kafkaTemplate.send("enroll-topic", data);
+    }
+
+    public void dropCourse(Enrollment enrollment) throws JsonProcessingException {
+        String data = new ObjectMapper().writeValueAsString(enrollment);
+        kafkaTemplate.send("drop-topic", data);
     }
 }

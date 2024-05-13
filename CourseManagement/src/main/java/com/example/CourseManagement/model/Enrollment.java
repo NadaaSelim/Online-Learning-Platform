@@ -1,10 +1,9 @@
-package com.example.student.model;
+package com.example.CourseManagement.model;
 
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.stereotype.Service;
 
 @Data
 @ToString

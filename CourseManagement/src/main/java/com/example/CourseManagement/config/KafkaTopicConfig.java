@@ -15,6 +15,11 @@ public class KafkaTopicConfig {
     }
 
     @Bean
+    public NewTopic dropTopic() {
+            return TopicBuilder.name("drop-topic")
+                .build();
+    }
+    @Bean
     public NewTopic NotificationTopic() {
             return TopicBuilder.name("notification-topic")
                 .build();

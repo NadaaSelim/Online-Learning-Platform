@@ -1,4 +1,4 @@
-package com.example.CourseManagement;
+package com.example.CourseManagement.model;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

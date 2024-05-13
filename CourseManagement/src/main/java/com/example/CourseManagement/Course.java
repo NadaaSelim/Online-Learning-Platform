@@ -3,10 +3,10 @@ package com.example.CourseManagement;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.UniqueConstraint;
+import com.example.CourseManagement.model.Instructor;
+import com.example.CourseManagement.model.Student;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 

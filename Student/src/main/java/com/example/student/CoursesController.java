@@ -31,4 +31,9 @@ public class CoursesController {
     public void enrollCourse(@RequestBody Enrollment enrollment) throws JsonProcessingException {
         courseService.enrollCourse(enrollment);
     }
+
+    @PostMapping("/drop")
+    public void dropCourse(@RequestBody Enrollment enrollment) throws JsonProcessingException {
+        courseService.dropCourse(enrollment);
+    }
 }
