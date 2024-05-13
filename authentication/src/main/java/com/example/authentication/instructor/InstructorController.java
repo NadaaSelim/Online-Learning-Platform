@@ -24,7 +24,7 @@ public class InstructorController {
     }
 
     @PostMapping("/register")
-    public String registerInstructor(@RequestBody Instructor instructor) {
+    public String registerInstructor(@ModelAttribute Instructor instructor) {
         if(studentRepository.findStudentByEmail(instructor.getEmail()).isPresent())
             return "Email already exists as a Student";
         try {
@@ -37,15 +37,17 @@ public class InstructorController {
     }
 
     @PostMapping("/login")
-    public String loginInstructor(@RequestBody Instructor instructor) {
+    public int loginInstructor(@ModelAttribute Instructor instructor) {
         Instructor instructor1 = instructorRepository.findInstructorByEmail(instructor.getEmail()).orElse(null);
         if (instructor1 == null) {
-            return "Instructor not found, Please create an account";
+            return -1;
+            //return "Instructor not found, Please create an account";
         }
         if (instructor1.getPassword().equals(instructor.getPassword())) {
-            return "Login successful";
+            return 1;
+            //return "Login successful";
         }
-        return "Login failed";
+        return 0;// return "Login failed";
     }
 
 }

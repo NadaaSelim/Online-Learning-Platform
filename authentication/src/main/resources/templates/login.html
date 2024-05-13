@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+<body>
+
+<div class=" justify-content-sm-center mx-auto  p-5">
+    <form id="loginForm" method="post">
+
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password"  placeholder="Password">
+        </div>
+        <div class="d-flex mt-4"><button type="submit" class="btn btn-secondary">Login</button></div>
+
+    </form>
+</div>
+<script>
+
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        // Format data for the request body
+        const formData = new URLSearchParams();
+        formData.append('email', email);
+        formData.append('password', password);
+
+        // Call the instructor login API
+        const instructorRequest = fetch('/api/instructors/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formData // Use the formatted data as the request body
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Return the response body as JSON
+                }
+                throw new Error('Instructor login failed');
+            });
+
+        // Call the student login API
+        const studentRequest = fetch('/api/students/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formData // Use the formatted data as the request body
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Return the response body as JSON
+                }
+                throw new Error('Student login failed');
+            });
+
+        // Process responses from both APIs
+        Promise.all([instructorRequest, studentRequest])
+            .then(([instructorResponse, studentResponse]) => {
+                // Handle responses from both APIs here
+                console.log('Instructor response:', instructorResponse);
+                console.log('Student response:', studentResponse);
+
+                // Check if either response is 1 and display it to the screen
+                if (instructorResponse === 1) {
+                    displayResponse("Login Successful As Instructor");
+                } else if (studentResponse === 1) {
+                    displayResponse("Login Successful As Student");
+                } else if(studentResponse === 0 || instructorResponse===0 ){
+                    displayResponse("Wrong Password");
+                    // None of the responses are 1
+                    // Handle this case if needed
+                }
+                else{displayResponse("User does not exist.")}
+            })
+            .catch(error => {
+                console.error('Login error:', error.message);
+                // Handle login error here
+            });
+    });
+
+    // Function to display the response to the screen
+    function displayResponse(response) {
+        // Assuming there's a div with id "responseOutput" to display the response
+        document.body.innerHTML = '';
+        const heading = document.createElement('h3');
+        heading.textContent = response;
+        document.body.appendChild(heading);
+        //document.getElementById("responseOutput").innerText = "Response: " + response;
+    }
+
+</script>
+</body>
+</html>

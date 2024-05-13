@@ -10,42 +10,42 @@
 </head>
 <body>
 <div class=" justify-content-sm-center mx-auto  p-5">
-    <form>
+    <form id="registerForm" method="post">
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name">
+            <input type="text" class="form-control" id="name"  name="name" aria-describedby="name" placeholder="Enter name">
         </div>
     <div class="form-group">
         <label for="email">Email address</label>
-        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email">
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
     </div>
     <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="Password">
+        <input type="password" class="form-control" id="password" name="password"  placeholder="Password">
     </div>
         <div class="form-group">
-            <label for="aff">Affiliation</label>
-            <input type="email" class="form-control" id="aff" aria-describedby="emailHelp" placeholder="Enter Affiliation">
+            <label for="affiliation">affiliation</label>
+            <input type="text" class="form-control" id="affiliation" name="affiliation"  placeholder="Enter affiliation">
         </div>
         <div class="form-group">
             <label for="bio">Bio</label>
-            <textarea class="form-control" id="bio" rows="2"></textarea>
+            <textarea class="form-control" name="bio" id="bio" rows="2"></textarea>
         </div>
 
         <div class="d-inline-flex ">
         <div class="custom-control custom-radio mr-3 ">
-            <input type="radio" id="instr" name="role" class="custom-control-input" onclick="showHideExperienceField()">
+            <input type="radio" id="instr" name="role"  value="Instructor" class="custom-control-input" onclick="showHideExperienceField()">
             <label class="custom-control-label" for="instr">Instructor</label>
         </div>
         <div class="custom-control custom-radio">
-            <input type="radio" id="stud" name="role" class="custom-control-input" onclick="showHideExperienceField()">
+            <input type="radio" id="stud" name="role" value="Student" class="custom-control-input" onclick="showHideExperienceField()">
             <label class="custom-control-label" for="stud">Student</label>
         </div>
         </div>
         <div id="expF" class="form-group">
-            <label for="exp">Years of Experience:</label>
-            <input type="number" class="form-control w-25" id="exp" >
+            <label for="yearsOfExperience">Years of Experience:</label>
+            <input type="number" class="form-control w-25" name="yearsOfExperience" id="yearsOfExperience" >
         </div>
         <div class="d-flex mt-4"><button type="submit" class="btn btn-secondary">Submit</button></div>
 
@@ -62,6 +62,54 @@
             experienceField.style.display = "block";
         }
     }
+    document.getElementById("registerForm").addEventListener("submit", function(event) {
+        var selectedRole = document.querySelector('input[name="role"]:checked').value;
+        if (selectedRole === "Instructor") {
+            this.action = "api/instructors/register";
+        } else {
+            this.action = "api/students/register";
+        }
+    });
+    //
+    // const email = document.getElementById("email").value;
+    // const password = document.getElementById("password").value;
+    //
+    // // Format data for the request body
+    // const formData = new URLSearchParams();
+    // formData.append('email', email);
+    // formData.append('password', password);
+    //
+    // // Call the student login API
+    // fetch('/api/students/login', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/x-www-form-urlencoded'
+    //     },
+    //     body: formData // Use the formatted data as the request body
+    // })
+    //     .then(response => {
+    //         if (response.ok) {
+    //             return ; // Return the response body as JSON
+    //         }
+    //         throw new Error('Student login failed');
+    //     })
+    //     .then(studentResponse => {
+    //         // Handle student login response here
+    //         console.log('Student response:', studentResponse);
+    //         if (studentResponse === -1) {
+    //             // Student not found, handle accordingly
+    //         } else if (studentResponse === 0) {
+    //             // Login successful, handle accordingly
+    //         } else {
+    //             // Login failed, handle accordingly
+    //         }
+    //         // Proceed to instructor login or redirect based on response
+    //     })
+    //     .catch(error => {
+    //         console.error('Login error:', error.message);
+    //         // Handle login error here
+    //     });
+
 </script>
 
 </html>
