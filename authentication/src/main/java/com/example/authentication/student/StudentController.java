@@ -1,7 +1,12 @@
 package com.example.authentication.student;
 
 import com.example.authentication.instructor.InstructorRepository;
+import com.netflix.discovery.EurekaClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.web.bind.annotation.*;
+import  com.example.authentication.config.RestTemplateConfig;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -11,10 +16,16 @@ public class StudentController {
 
     private final StudentRepository studentRepository;
     private final InstructorRepository instructorRepository;
+    private final EurekaClient eurekaClient;
 
-    public StudentController(StudentRepository studentRepository, InstructorRepository instructorRepository) {
+    private final RestTemplate restTemplate;
+
+    public StudentController(StudentRepository studentRepository, InstructorRepository instructorRepository, EurekaClient eurekaClient, RestTemplate restTemplate) {
         this.studentRepository = studentRepository;
         this.instructorRepository = instructorRepository;
+        this.eurekaClient = eurekaClient;
+       // this.restTemplate = restTemplate;
+        this.restTemplate = restTemplate;
     }
 
     @GetMapping("/all")
@@ -44,6 +55,11 @@ public class StudentController {
             return -1;
         }
         if (student1.getPassword().equals(student.getPassword())) {
+            String courseServiceUrl = eurekaClient.getNextServerFromEureka("student-service", false).getHomePageUrl();
+
+            restTemplate.getForObject(courseServiceUrl+"/api/courses/set/"+student.getEmail()+'/'+student1.getId()
+                        ,String.class);
+
             return 1;
             //return "Login successful";
         }

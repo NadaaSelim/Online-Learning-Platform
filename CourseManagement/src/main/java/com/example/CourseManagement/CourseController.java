@@ -23,6 +23,7 @@ public class CourseController {
     public List<Course> getCourses() {
         return courserepo.findAll();
     }
+
     @PostMapping("/add")
     public Course addCourse(@RequestBody Course course) {
         return courserepo.save(course);
@@ -84,5 +85,46 @@ public class CourseController {
         return review.toString();
     }
 
+    @PutMapping("/accept/{courseid}/{studentid}/{instrId}")
+    public String acceptEnroll(@PathVariable("courseid") String courseid, @PathVariable("studentid") String studentid, @PathVariable("instrId") String instrId) {
+        Course course = courserepo.findById(courseid).orElseThrow(() -> new RuntimeException("Course not found"));
+        if (!course.getInstructor().getId().equals(instrId))
+            return "You are not the instructor to accept enrollments";
+        List<Student> students = course.getStudents();
+        Student student = students.stream()
+                .filter(stud -> stud.getId().equals(studentid))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        if (student.getStatus().equals(Status.ACCEPTED))
+            return "Student is already enrolled";
+        if (student.getStatus().equals(Status.REJECTED))
+            return "Student has already been rejected";
+
+        student.setStatus(Status.ACCEPTED);
+        courserepo.save(course);
+        return "Student has been enrolled";
+    }
+
+    @PutMapping("/reject/{courseid}/{studentid}/{instrId}")
+    public String rejectEnroll(@PathVariable("courseid") String courseid, @PathVariable("studentid") String studentid, @PathVariable("instrId") String instrId) {
+        Course course = courserepo.findById(courseid).orElseThrow(() -> new RuntimeException("Course not found"));
+        if (!course.getInstructor().getId().equals(instrId))
+            return "You are not the instructor to reject enrollments";
+        List<Student> students = course.getStudents();
+        Student student = students.stream()
+                .filter(stud -> stud.getId().equals(studentid))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        if (student.getStatus().equals(Status.ACCEPTED))
+            return "Student is already enrolled";
+        if (student.getStatus().equals(Status.REJECTED))
+            return "Student has already been rejected";
+
+        student.setStatus(Status.REJECTED);
+        courserepo.save(course);
+        return "Student has been rejected";
+    }
+
 
 }
+

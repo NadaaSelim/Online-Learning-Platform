@@ -24,5 +24,6 @@ public interface CourseRepository extends MongoRepository<Course, String> {
     //Student findByIdAndStudentsId(String courseId, String studentId);
     int countStudentsByIdAndStudentsStatus(String courseId, Status status);
     boolean existsByIdAndStudentsIdAndStudentsStatus(String courseId, String studentId,Status status);
+    //boolean existsByIdAndInstructor_Id(String courseId,String instructorId)
     //void removeByIdAndStudentsId(String courseId,String studentId);
 }
