@@ -15,6 +15,7 @@
     <module>CourseManagement</module>
     <module>Student</module>
     <module>kafka</module>
+    <module>Instructor</module>
   </modules>
 
   <properties>
