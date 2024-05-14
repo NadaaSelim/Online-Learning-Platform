@@ -2,12 +2,14 @@ package com.example.student;
 
 import com.example.student.model.Course;
 import com.example.student.model.Enrollment;
+import com.example.student.model.UiCourse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
@@ -41,8 +43,21 @@ public class CoursesController {
         return (String) session.getAttribute("sessionID");
     }
     @GetMapping("")
-    public List<Course> getAllCourses() {
-        return courseService.getAllCourses();
+    public List<UiCourse> getAllCourses(Model model) {
+
+        List<UiCourse> uiCourses = courseService.getAllCourses().stream().map(course -> {
+            UiCourse uiCourse = new UiCourse();
+            uiCourse.setId(course.getId());
+            uiCourse.setName(course.getName());
+            uiCourse.setInstructor(course.getInstructor().getInstructorName());
+            uiCourse.setDuration(course.getDuration());
+            uiCourse.setCapacity(course.getCapacity());
+            uiCourse.setCategory(course.getCategory());
+            return uiCourse;
+        }).toList();
+
+        model.addAttribute("courses", uiCourses);
+        return uiCourses;
     }
 
     @PostMapping(value ="/enroll", consumes = MediaType.APPLICATION_JSON_VALUE)
