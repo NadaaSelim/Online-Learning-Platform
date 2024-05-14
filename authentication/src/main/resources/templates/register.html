@@ -66,6 +66,7 @@
         var selectedRole = document.querySelector('input[name="role"]:checked').value;
         if (selectedRole === "Instructor") {
             this.action = "api/instructors/register";
+            //window.location.href = {thatEurekaurl}
         } else {
             this.action = "api/students/register";
         }

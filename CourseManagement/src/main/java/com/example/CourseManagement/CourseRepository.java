@@ -19,6 +19,7 @@ public interface CourseRepository extends MongoRepository<Course, String> {
     })
     List<Course> findAllByOrderByAverageRatingDesc();
     List<Course> findByCategory(Category name);
+    List<Course> findByStudents_IdAndStudents_Status(String studentId, Status status);
 
     boolean existsByIdAndStudentsId(String courseId, String studentId);
     //Student findByIdAndStudentsId(String courseId, String studentId);
