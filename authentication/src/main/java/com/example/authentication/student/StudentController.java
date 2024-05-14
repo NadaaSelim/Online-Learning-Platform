@@ -51,7 +51,10 @@ public class StudentController {
 
         return "Student registered.\n";
     }
-
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable("id") String id){
+        studentRepository.deleteById(id);
+    }
     @GetMapping("/{id}")
     public Student getStudent(@PathVariable("id") String id){
         return studentRepository.findStudentById(id);

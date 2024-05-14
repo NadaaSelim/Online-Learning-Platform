@@ -23,6 +23,10 @@ public class InstructorController {
         return instructorRepository.findAll();
     }
 
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable("id") String id){
+        instructorRepository.deleteById(id);
+    }
     @PostMapping("/register")
     public String registerInstructor(@ModelAttribute Instructor instructor) {
         if(studentRepository.findStudentByEmail(instructor.getEmail()).isPresent())

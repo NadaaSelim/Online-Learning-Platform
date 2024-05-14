@@ -25,5 +25,5 @@ public class Course {
     private int capacity;
     private  Category category;
     private List<Student> students = new ArrayList<>();
-
+    private boolean published=false;
 }

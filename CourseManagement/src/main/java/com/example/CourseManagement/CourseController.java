@@ -21,9 +21,13 @@ public class CourseController {
 
     @GetMapping("")
     public List<Course> getCourses() {
-        return courserepo.findAll();
+        return courserepo.findCoursesByPublishedTrue();
     }
 
+    @GetMapping("/unpub")
+    public List<Course> getUnpubCourses(){
+        return courserepo.findCoursesByPublishedFalse();
+    }
     @PostMapping("/add")
     public Course addCourse(@RequestBody Course course) {
         return courserepo.save(course);
