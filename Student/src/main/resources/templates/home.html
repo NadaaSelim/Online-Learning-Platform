@@ -24,7 +24,7 @@
     <tbody>
     </tbody>
 </table>
-
+<button id="viewEnrollmentsBtn" class="btn btn-success mt-3 d-block mx-auto">View Course Enrollments</button>
 <script th:inline="javascript">
     $(document).ready(function() {
         $.ajax({
@@ -87,6 +87,9 @@
                         alert("Error dropping from course.");
                     }
                 });
+            });
+            $("#viewEnrollmentsBtn").click(function () {
+                window.location.href = "api/student/enrollments";
             });
         }
     });
