@@ -16,6 +16,7 @@ enum Category{ HU, TECH , SCI}
 @Data
 // a name, duration, category, rating, capacity,
 //number of enrolled students, and list of reviews.
+
 public class Course {
     @Id
     private String id;

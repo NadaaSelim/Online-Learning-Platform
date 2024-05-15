@@ -21,13 +21,41 @@ public class CourseController {
 
     @GetMapping("")
     public List<Course> getCourses() {
-        return courserepo.findCoursesByPublishedTrue();
+        return courserepo.findByPublished(true);
     }
 
     @GetMapping("/unpub")
     public List<Course> getUnpubCourses(){
-        return courserepo.findCoursesByPublishedFalse();
+        return courserepo.findByPublished(false);
     }
+    @PutMapping("/publish/{id}")
+    public void publish(@PathVariable("id") String id){
+        Optional<Course> courseOptional = courserepo.findById(id);
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            course.setPublished(true);
+            courserepo.save(course);
+            }
+    }
+    @PutMapping("/edit/{id}")
+    public void edit(@PathVariable("id") String id,@RequestBody Course course){
+        Optional<Course> existingCourse = courserepo.findById(id);
+        if (existingCourse.isPresent()) {
+            Course updatedCourse = existingCourse.get();
+            updatedCourse.setName(course.getName());
+            updatedCourse.setDuration(course.getDuration());
+            updatedCourse.setCapacity(course.getCapacity());
+            updatedCourse.setCategory(course.getCategory());
+
+            courserepo.save(updatedCourse);
+        }
+    }
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable("id") String id) {
+        courserepo.deleteById(id);
+    }
+
+
     @PostMapping("/add")
     public Course addCourse(@RequestBody Course course) {
         return courserepo.save(course);
