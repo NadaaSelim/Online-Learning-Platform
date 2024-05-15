@@ -44,9 +44,21 @@ public class StudentController {
         catch (Exception e) {
             return "Student already exists";
         }
+        String courseServiceUrl = eurekaClient.getNextServerFromEureka("student-service", false).getHomePageUrl();
+
+        restTemplate.getForObject(courseServiceUrl+"/api/courses/set/"+student.getId()
+                ,String.class);
+
         return "Student registered.\n";
     }
-
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable("id") String id){
+        studentRepository.deleteById(id);
+    }
+    @GetMapping("/{id}")
+    public Student getStudent(@PathVariable("id") String id){
+        return studentRepository.findStudentById(id);
+    }
     @PostMapping("/login")
     public int loginStudent(@ModelAttribute Student student) {
         Student student1 = studentRepository.findStudentByEmail(student.getEmail()).orElse(null);
@@ -57,7 +69,7 @@ public class StudentController {
         if (student1.getPassword().equals(student.getPassword())) {
             String courseServiceUrl = eurekaClient.getNextServerFromEureka("student-service", false).getHomePageUrl();
 
-            restTemplate.getForObject(courseServiceUrl+"/api/courses/set/"+student.getEmail()+'/'+student1.getId()
+            restTemplate.getForObject(courseServiceUrl+"/api/courses/set/"+student1.getId()
                         ,String.class);
 
             return 1;

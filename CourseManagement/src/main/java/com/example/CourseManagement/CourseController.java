@@ -21,8 +21,40 @@ public class CourseController {
 
     @GetMapping("")
     public List<Course> getCourses() {
-        return courserepo.findAll();
+        return courserepo.findByPublished(true);
     }
+
+    @GetMapping("/unpub")
+    public List<Course> getUnpubCourses(){
+        return courserepo.findByPublished(false);
+    }
+    @PutMapping("/publish/{id}")
+    public void publish(@PathVariable("id") String id){
+        Optional<Course> courseOptional = courserepo.findById(id);
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            course.setPublished(true);
+            courserepo.save(course);
+            }
+    }
+    @PutMapping("/edit/{id}")
+    public void edit(@PathVariable("id") String id,@RequestBody Course course){
+        Optional<Course> existingCourse = courserepo.findById(id);
+        if (existingCourse.isPresent()) {
+            Course updatedCourse = existingCourse.get();
+            updatedCourse.setName(course.getName());
+            updatedCourse.setDuration(course.getDuration());
+            updatedCourse.setCapacity(course.getCapacity());
+            updatedCourse.setCategory(course.getCategory());
+
+            courserepo.save(updatedCourse);
+        }
+    }
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable("id") String id) {
+        courserepo.deleteById(id);
+    }
+
 
     @PostMapping("/add")
     public Course addCourse(@RequestBody Course course) {
@@ -44,10 +76,15 @@ public class CourseController {
         return courserepo.findByCategory(Category.valueOf(category));
     }
 
-    @GetMapping("/all")
-    public List<Course> getCoursesByRating() {
-        return courserepo.findAllByOrderByAverageRatingDesc();
+
+    @GetMapping("/all/{id}")
+    public List<Course> getEnrolledCourses(@PathVariable("id") String id){
+        return courserepo.findByStudents_IdAndStudents_Status(id,Status.ACCEPTED);
     }
+//    @GetMapping("/all")
+//    public List<Course> getCoursesByRating() {
+//        return courserepo.findAllByOrderByAverageRatingDesc();
+//    }
 
     @DeleteMapping("/cancel/{courseid}/{studentid}")
     public String removeStudentToCourse(@PathVariable("courseid") String courseid, @PathVariable("studentid") String studentid) {
