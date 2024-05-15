@@ -1,11 +1,15 @@
 package com.example.instructor;
 
 import com.example.instructor.models.Course;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.discovery.EurekaClient;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,25 +26,44 @@ public class CourseService {
 
     private final EurekaClient eurekaClient;
 
+
     @LoadBalanced // Enables client-side load balancing
     private final RestTemplate restTemplate;
-    private  String courseServiceUrl ;
+
+
+
 
     public CourseService(EurekaClient eurekaClient, RestTemplate restTemplate) {
         this.eurekaClient = eurekaClient;
         this.restTemplate = restTemplate;
-        this.courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
+
     }
 
+    @CircuitBreaker(name="ViewCourses", fallbackMethod = "fallBackCourses")
     public List<Course> getAllCourses() {
+        try {
         // Get the service instance information from Eureka
-        String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
+        String courseServiceUrl = "http://localhost:8081";
+                //eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
 
         // Use RestTemplate with the resolved service URL
-        return restTemplate.exchange(courseServiceUrl + "/api/courses",
-                        HttpMethod.GET, null,
-                        new ParameterizedTypeReference<List<Course>>() {}).getBody();
+            String jsonResponse =   restTemplate.getForObject(courseServiceUrl + "/api/courses", String.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<Course> courses = objectMapper.readValue(jsonResponse, new TypeReference<List<Course>>() {});
+            return  courses;
+                //restTemplate.exchange(courseServiceUrl + "/api/courses",
+                  //      HttpMethod.GET, null,
+                    //    new ParameterizedTypeReference<List<Course>>() {}).getBody();
+        } catch (Exception e) {
+            // Catch any exceptions that occur and handle them
+            throw new RuntimeException("Failed to fetch courses from CourseManagement service", e);
+        }
     }
+    public ResponseEntity<String> fallBackCourses(Exception e){
+        return new ResponseEntity<String>("Course service is down", HttpStatus.OK);
+
+    }
+
 
     public Course addCourse(Course course){
 
@@ -55,7 +78,7 @@ public class CourseService {
     }
 
     public List<Course> findCourseByName(String name){
-
+        String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
         // Use RestTemplate with the resolved service URL
         return restTemplate.exchange(courseServiceUrl + "/api/courses/name?name="+name,
                 HttpMethod.GET, null,
@@ -63,6 +86,7 @@ public class CourseService {
     }
 
     public List<Course> findCategory(String category){
+        String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
         return restTemplate.exchange(courseServiceUrl + "/api/courses/category?category="+category,
                 HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Course>>() {}).getBody();
@@ -70,6 +94,7 @@ public class CourseService {
     }
 
     public List<Course> getCoursesByRating(){
+        String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
         return restTemplate.exchange(courseServiceUrl + "/api/courses/all",
                 HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Course>>() {}).getBody();
