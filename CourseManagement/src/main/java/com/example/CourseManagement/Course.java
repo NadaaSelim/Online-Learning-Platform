@@ -27,4 +27,5 @@ public class Course {
     private  Category category;
     private List<Student> students = new ArrayList<>();
     private boolean published=false;
+    private double averageRating=0;
 }

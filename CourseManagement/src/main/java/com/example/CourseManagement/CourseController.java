@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
 @RestController
 @RequestMapping("/api/courses")
 public class CourseController {
     @Autowired
     private final CourseRepository courserepo;
+    @Autowired
+    private CourseService courseService;
 
     public CourseController(CourseRepository courserepo) {
         this.courserepo = courserepo;
@@ -81,10 +84,10 @@ public class CourseController {
     public List<Course> getEnrolledCourses(@PathVariable("id") String id){
         return courserepo.findByStudents_IdAndStudents_Status(id,Status.ACCEPTED);
     }
-//    @GetMapping("/all")
-//    public List<Course> getCoursesByRating() {
-//        return courserepo.findAllByOrderByAverageRatingDesc();
-//    }
+    @GetMapping("/sorted")
+    public List<Course> getSortedCourses(){
+        return courseService.findAllByOrderByAverageRatingDesc();
+    }
 
     @DeleteMapping("/cancel/{courseid}/{studentid}")
     public String removeStudentToCourse(@PathVariable("courseid") String courseid, @PathVariable("studentid") String studentid) {
