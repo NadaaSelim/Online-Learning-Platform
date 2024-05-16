@@ -21,7 +21,7 @@ public class CoursesController {
 
     @GetMapping("")
 
-    public List<Course> getAllCourses() {
+    public ResponseEntity<Object> getAllCourses() {
         return courseService.getAllCourses();
     }
 
@@ -47,6 +47,9 @@ public class CoursesController {
         return  courseService.getCoursesByRating();
 
     }
+
+    // accept
+    // reject
 
 
 

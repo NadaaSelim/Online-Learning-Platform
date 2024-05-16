@@ -1,6 +1,7 @@
 package com.example.instructor;
 
 import com.example.instructor.models.Course;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.discovery.EurekaClient;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -40,7 +42,7 @@ public class CourseService {
     }
 
     @CircuitBreaker(name="ViewCourses", fallbackMethod = "fallBackCourses")
-    public List<Course> getAllCourses() {
+    public ResponseEntity<Object> getAllCourses() {
         try {
         // Get the service instance information from Eureka
         String courseServiceUrl = "http://localhost:8081";
@@ -49,18 +51,22 @@ public class CourseService {
         // Use RestTemplate with the resolved service URL
             String jsonResponse =   restTemplate.getForObject(courseServiceUrl + "/api/courses", String.class);
             ObjectMapper objectMapper = new ObjectMapper();
-            List<Course> courses = objectMapper.readValue(jsonResponse, new TypeReference<List<Course>>() {});
-            return  courses;
+        List<Course> courses = null;
+        courses = objectMapper.readValue(jsonResponse, new TypeReference<List<Course>>() {});
+            return  new ResponseEntity<>(courses, HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Service failed!", e);
+        }
+
                 //restTemplate.exchange(courseServiceUrl + "/api/courses",
                   //      HttpMethod.GET, null,
                     //    new ParameterizedTypeReference<List<Course>>() {}).getBody();
-        } catch (Exception e) {
-            // Catch any exceptions that occur and handle them
-            throw new RuntimeException("Failed to fetch courses from CourseManagement service", e);
-        }
+
     }
-    public ResponseEntity<String> fallBackCourses(Exception e){
-        return new ResponseEntity<String>("Course service is down", HttpStatus.OK);
+    public ResponseEntity<Object>fallBackCourses(Throwable exception){
+        //List<Course> fallbackProducts = Collections.singletonList(new Course("0"," Service is down try later "));
+        return new ResponseEntity<>(" Service is down please try later ", HttpStatus.SERVICE_UNAVAILABLE);
+        //return new ResponseEntity<String>("Course service is down", HttpStatus.OK);
 
     }
 

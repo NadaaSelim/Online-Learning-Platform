@@ -21,4 +21,8 @@ public class Course {
     private  Category category;
     private List<Student> students = new ArrayList<>();
 
+    public Course(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
