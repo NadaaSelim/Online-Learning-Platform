@@ -31,6 +31,7 @@ public interface CourseRepository extends MongoRepository<Course, String> {
 //    public List<Course> findByPublishedOrderByAverageRatingDesc() ;
     List<Course> findByCategory(Category name);
     List<Course> findByStudents_IdAndStudents_Status(String studentId, Status status);
+
     List<Course> findCoursesByPublishedTrue();
     boolean existsByIdAndStudentsId(String courseId, String studentId);
     //Student findByIdAndStudentsId(String courseId, String studentId);
@@ -44,6 +45,8 @@ public interface CourseRepository extends MongoRepository<Course, String> {
     List<Course> findByPublishedTrue();
 
     List<Course> findByPublished(boolean b);
+
+    List<Course> findByStudents_Id(String studentid);
     //boolean existsByIdAndInstructor_Id(String courseId,String instructorId)
     //void removeByIdAndStudentsId(String courseId,String studentId);
 }

@@ -21,8 +21,8 @@ public class EnrollmentsController {
     }
 
     @GetMapping("/all")
-    public List<UiEnrollment> getAllEnrollments(@RequestParam("id") String id, Model model){
-        List<UiEnrollment> uiEnrollments = enrollmentService.getAllEnrollments(id);
+    public List<UiEnrollment> getAllEnrollments(@RequestParam("studentid") String studentid, Model model){
+        List<UiEnrollment> uiEnrollments = enrollmentService.getAllEnrollments(studentid);
         model.addAttribute("enrollments", uiEnrollments);
         return uiEnrollments;
 

@@ -30,9 +30,8 @@ public class EnrollmentService {
     public List<UiEnrollment> getAllEnrollments(String studentId){
         // Get the service instance information from Eureka
         String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
-
         // Use RestTemplate with the resolved service URL
-        List<Course> courses = restTemplate.exchange(courseServiceUrl + "/api/courses/enrollments/"+studentId,
+        List<Course> courses = restTemplate.exchange(courseServiceUrl + "/api/courses/enrollments?studentid="+studentId,
                 HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Course>>() {}).getBody();
 
@@ -48,6 +47,8 @@ public class EnrollmentService {
             return uiEnrollments;
         }
         return null;
+
+
 
     }
 }
