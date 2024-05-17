@@ -79,8 +79,10 @@ public class CoursesController {
         return courseService.reject(courseid,studentid,instrId);
     }
 
-//    @GetMapping("/viewEnrollements/")
-
+    @GetMapping("/enrollements")
+    public List<Course> enrollements(@RequestParam("instructorid") String instructorid){
+        return courseService.getPendingCourses(instructorid);
+    }
 
 
 }

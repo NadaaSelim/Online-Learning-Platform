@@ -170,27 +170,35 @@ public class CourseController {
     public List<Course> getEnrollments(@RequestParam("studentid") String studentid){
         return courserepo.findByStudents_Id(studentid);
     }
-//    @GetMapping("/enrollements")
-//    public List<Course> getInsEnrollements(@RequestParam("instructorid") String instructorid){
-//        List<Course> courses = courserepo.findByPublished(true);
-//        courses.stream().filter(course -> course.getInstructor().getId().equals(instructorid));
-//        List<Course> coursesWithPending = new ArrayList<>();
-//        for (Course course : courses) {
-//            List<Student> pending = new ArrayList<>();
-//            for (Student student : course.getStudents()) {
-//                if(student.getStatus() == Status.PENDING) {
-//                        pending.add(student);
-//                }
-//            }
-//            if(pending.size() > 0) {
-//                Course newC = new Course(course);
-//                newC.setStudents(pending);
-//                coursesWithPending.add(newC);
-//            }
-//        }
-//        return coursesWithPending;
-//
-//        }
+    @GetMapping("/enrollements")
+    public List<Course> getInsEnrollements(@RequestParam("instructorid") String instructorid){
+        List<Course> courses = courserepo.findByPublished(true);
+        courses.stream().filter(course -> course.getInstructor().getId().equals(instructorid));
+        List<Course> coursesWithPending = new ArrayList<>();
+        for (Course course : courses) {
+            List<Student> pending = new ArrayList<>();
+            for (Student student : course.getStudents()) {
+                if(student.getStatus() == Status.PENDING) {
+                        pending.add(student);
+                }
+            }
+            if(pending.size() > 0) {
+                Course newC = new Course();
+                newC.setId(course.getId());
+                newC.setName(course.getName());
+                newC.setInstructor(course.getInstructor());
+                newC.setPublished(course.isPublished());
+                newC.setCapacity(course.getCapacity());
+                newC.setDuration(course.getDuration());
+                newC.setAverageRating(course.getAverageRating());
+                newC.setCategory(course.getCategory());
+                newC.setStudents(pending);
+                coursesWithPending.add(newC);
+            }
+        }
+        return coursesWithPending;
+
+        }
 
 
 }

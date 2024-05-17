@@ -18,8 +18,9 @@
     <label for="categoryFilter">Filter by Category:</label>
     <select id="categoryFilter" class="form-control">
         <option value="">All Categories</option>
-        <option th:each="cat : ${T(com.example.student.model.Category).values()}"
-                th:value="${cat}" th:text="${cat}"></option>
+        <option value="HU">HU</option>
+        <option value="SCI">SCI</option>
+        <option value="TECH">TECH</option>
     </select>
 </div>
 
@@ -91,15 +92,12 @@
             filteredCourses.forEach(course => {
                 tableBody.append(`<tr>
                     <td>${course.name}</td>
-                    <td>${course.instructor}</td>
+                    <td>${course.instructor.instructorName}</td>
                     <td>${course.duration}</td>
                     <td>${course.capacity}</td>
                     <td>${course.category}</td>
                     <td>${course.averageRating}</td>
-                    <td>
-                        <button class="btn btn-primary enroll-btn" data-course-id="${course.id}">Enroll</button>
-                        <button class="btn btn-danger drop-btn" data-course-id="${course.id}">Drop</button>
-                    </td>
+
                 </tr>`);
             });
 
