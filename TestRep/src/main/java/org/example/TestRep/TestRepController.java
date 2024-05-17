@@ -174,36 +174,32 @@ public class TestRepController {
 
     //view exams
     @GetMapping("/exams/{testRepId}")
-    public ResponseEntity<List<Exam>> getExams(@PathVariable("testRepId") String testRepId ){
+    public List<Exam> getExams(@PathVariable("testRepId") String testRepId ) {
         Optional<TestRep> optionalTestRep = testRepRepository.findById(testRepId);
-        if(optionalTestRep.isPresent()){
+        if (optionalTestRep.isPresent()) {
             TestRep testRep = optionalTestRep.get();
             List<Exam> exams = examRepository.findByCid(testRep.getCenter().getId());
-             return ResponseEntity.ok(exams);
-        }
-        else{
-            return ResponseEntity.notFound().build();
-        }
+            return exams;
 
 
+        }
     }
-
     // view students grades of exams
     @GetMapping("/grades/{examId}")
-    public ResponseEntity<List<Integer>> getGrades(@PathVariable("examId") String examId){
+    public List<Integer> getGrades(@PathVariable("examId") String examId){
 
-        Optional<Exam> optionalExam = examRepository.findById(examId);
-        if(optionalExam.isPresent()){
-            Exam exam = optionalExam.get();
-            List<Integer> grades = exam.getStudents().stream()
-                    .map(Student::getGrade)
-                    .collect(Collectors.toList());
-            return ResponseEntity.ok(grades);
-        }
-        else {
-            return ResponseEntity.notFound().build();
-        }
+            Optional<Exam> optionalExam = examRepository.findById(examId);
+            if (optionalExam.isPresent()) {
+                Exam exam = optionalExam.get();
+                List<Integer> grades = exam.getStudents().stream()
+                        .map(Student::getGrade)
+                        .collect(Collectors.toList());
 
+                return grades;
+            } else {
+                return null;
+            }
+        }
 
     }
 
