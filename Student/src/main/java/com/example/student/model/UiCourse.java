@@ -12,5 +12,6 @@ public class UiCourse {
     private String instructor;
     private int duration;       //duration in HOURS
     private int capacity;
+    private double averageRating;
     private  Category category;
 }

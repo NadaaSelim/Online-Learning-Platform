@@ -17,13 +17,7 @@ public class StudentApplication {
     public static void main(String[] args) {
         SpringApplication.run(StudentApplication.class, args);
     }
-    @GetMapping("/enrollments")
-    public ModelAndView enrollments(@RequestParam("studentid") String studentid){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("enrollments.html");
-        modelAndView.addObject("studentid", studentid);
-        return modelAndView;
-    }
+
 
 
 }

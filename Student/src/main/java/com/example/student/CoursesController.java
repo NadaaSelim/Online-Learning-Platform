@@ -2,6 +2,7 @@ package com.example.student;
 
 import com.example.student.model.Course;
 import com.example.student.model.Enrollment;
+import com.example.student.model.Review;
 import com.example.student.model.UiCourse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,6 +52,7 @@ public class CoursesController {
             uiCourse.setDuration(course.getDuration());
             uiCourse.setCapacity(course.getCapacity());
             uiCourse.setCategory(course.getCategory());
+            uiCourse.setAverageRating(course.getAverageRating());
             return uiCourse;
         }).toList();
 
@@ -66,5 +68,12 @@ public class CoursesController {
     @PostMapping("/drop")
     public void dropCourse(@RequestBody Enrollment enrollment) throws JsonProcessingException {
         courseService.dropCourse(enrollment);
+    }
+
+    @PostMapping("/review/{courseid}/{studentid}")
+    public String reviewCourse(@PathVariable("courseid") String courseid, @PathVariable("studentid") String studentid,
+                             @RequestBody Review review) throws JsonProcessingException {
+
+        return courseService.reviewCourse(courseid, studentid, review);
     }
 }
