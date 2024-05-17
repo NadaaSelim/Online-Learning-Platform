@@ -29,7 +29,7 @@ public class Course {
     private boolean published=false;
     private double averageRating=0;
 
-    public Course(Course course) {
+   /* public Course(Course course) {
         this.id = course.getId();
         this.name = course.getName();
         this.instructor = course.getInstructor();
@@ -38,5 +38,5 @@ public class Course {
         this.category = course.getCategory();
         this.published = course.isPublished();
         this.averageRating = course.getAverageRating();
-    }
+    }*/
 }

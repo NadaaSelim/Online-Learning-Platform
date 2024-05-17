@@ -26,7 +26,7 @@ public class UIController {
     @GetMapping("")
     public ModelAndView index() {
 
-        return new ModelAndView("home.html");
+        return new ModelAndView("index.html");
     }
     @GetMapping("/add")
     public ModelAndView addCourse() {

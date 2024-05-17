@@ -41,33 +41,36 @@ public class CourseService {
 
     }
 
-    @CircuitBreaker(name="ViewCourses", fallbackMethod = "fallBackCourses")
+    //@CircuitBreaker(name="ViewCourses", fallbackMethod = "fallBackCourses")
     public List<Course> getAllCourses() {
-        try {
-        // Get the service instance information from Eureka
-        String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
 
-        // Use RestTemplate with the resolved service URL
-            String jsonResponse =   restTemplate.getForObject(courseServiceUrl + "/api/courses", String.class);
+            // Get the service instance information from Eureka
+            String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
+
+            // Use RestTemplate with the resolved service URL
+       /*     String jsonResponse =   restTemplate.getForObject(courseServiceUrl + "/api/courses", String.class);
             ObjectMapper objectMapper = new ObjectMapper();
         List<Course> courses = null;
         courses = objectMapper.readValue(jsonResponse, new TypeReference<List<Course>>() {});
             return  courses;
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Service failed!", e);
-        }
+        }*/
 
-                //restTemplate.exchange(courseServiceUrl + "/api/courses",
-                  //      HttpMethod.GET, null,
-                    //    new ParameterizedTypeReference<List<Course>>() {}).getBody();
+            return restTemplate.exchange(courseServiceUrl + "/api/courses",
+                    HttpMethod.GET, null,
+                    new ParameterizedTypeReference<List<Course>>() {
+                    }).getBody();
+
 
     }
+        /*
     public ResponseEntity<Object>fallBackCourses(Throwable exception){
         //List<Course> fallbackProducts = Collections.singletonList(new Course("0"," Service is down try later "));
         return new ResponseEntity<>(" Service is down please try later ", HttpStatus.SERVICE_UNAVAILABLE);
         //return new ResponseEntity<String>("Course service is down", HttpStatus.OK);
 
-    }
+    }*/
 
 
     public Course addCourse(Course course){
