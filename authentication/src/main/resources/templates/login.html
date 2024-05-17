@@ -76,15 +76,15 @@
 
                 // Check if either response is 1 and display it to the screen
                 if (instructorResponse === 1) {
-                    displayResponse("Login Successful As Instructor",true);
+                    displayResponse("Login Successful As Instructor",2);
                 } else if (studentResponse === 1) {
-                    displayResponse("Login Successful As Student",true);
+                    displayResponse("Login Successful As Student",1);
                 } else if(studentResponse === 0 || instructorResponse===0 ){
-                    displayResponse("Wrong Password",false);
+                    displayResponse("Wrong Password",0);
                     // None of the responses are 1
                     // Handle this case if needed
                 }
-                else{displayResponse("User does not exist.",false)}
+                else{displayResponse("User does not exist.",0)}
             })
             .catch(error => {
                 console.error('Login error:', error.message);
@@ -95,8 +95,10 @@
     // Function to display the response to the screen
     function displayResponse(response,flag) {
         // Assuming there's a div with id "responseOutput" to display the response
-        if(flag)
+        if(flag===1)
             return window.location.href = "http://localhost:8082"
+        if(flag===2)
+            return window.location.href = "http://localhost:8083"
 
         document.body.innerHTML = '';
         const heading = document.createElement('h3');

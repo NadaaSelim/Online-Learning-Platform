@@ -21,11 +21,9 @@ import java.util.Map;
 public class CoursesController {
 
     private final CourseService courseService;
-    private final ObjectMapper objectMapper;
     static HttpSession session;
-    public CoursesController(CourseService courseService, ObjectMapper objectMapper) {
+    public CoursesController(CourseService courseService) {
         this.courseService = courseService;
-        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/set/{atrVal}")

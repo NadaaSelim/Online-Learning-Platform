@@ -1,11 +1,14 @@
 package com.example.instructor;
 
 import com.example.instructor.models.Course;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+//import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +17,7 @@ import java.util.Optional;
 public class CoursesController {
 
     private final CourseService courseService;
-
+    static HttpSession session;
     public CoursesController(CourseService courseService) {
         this.courseService = courseService;
     }
@@ -29,7 +32,20 @@ public class CoursesController {
         return courseService.addCourse(course);
     }
 
-
+    @GetMapping("/set/{atrVal}")
+    public void setSession(@PathVariable("atrVal") String atrVal, HttpServletRequest request ){
+        String atrKey = "sessionID";
+        System.out.println("Recieved "+atrKey+atrVal);
+        session = request.getSession();
+        session.setAttribute(atrKey, atrVal);
+        System.out.println("getAttribute() "+session.getAttribute(atrKey));
+        System.out.println(Arrays.toString(request.getCookies()));
+        //return new ModelAndView("home");
+        //return "redirect:/home.html";
+    }
+    public static String getSession(){
+        return (String) session.getAttribute("sessionID");
+    }
 
     @GetMapping("/name")
     public List<Course> findCourseByName(@RequestParam("name") String name){

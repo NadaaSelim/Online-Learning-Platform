@@ -1,0 +1,7 @@
+<session>
+    <ejb-name>requester</ejb-name>
+    <session-bean>
+        <ejb-class>com.example.demo.Requester</ejb-class>
+        <stateless>true</stateless>
+    </session-bean>
+</session>
