@@ -1,5 +1,7 @@
 package org.example.TestRep;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.example.TestRep.model.Center;
 import org.example.TestRep.model.Exam;
 import org.example.TestRep.model.Student;
@@ -19,11 +21,24 @@ public class TestRepController {
     private final TestRepRepository testRepRepository;
     private final CenterRepository centerRepository;
     private final ExamRepository examRepository;
+    static HttpSession session;
 
     public TestRepController(TestRepRepository testRepRepository, CenterRepository centerRepository, ExamRepository examRepository) {
         this.testRepRepository = testRepRepository;
         this.centerRepository = centerRepository;
         this.examRepository = examRepository;
+    }
+    @GetMapping("/set/{atrVal}")
+    public void setSession(@PathVariable("atrVal") String atrVal, HttpServletRequest request ){
+        String atrKey = "sessionID";
+        System.out.println("Recieved "+atrKey+atrVal);
+        session = request.getSession();
+        session.setAttribute(atrKey, atrVal);
+        System.out.println("getAttribute() "+session.getAttribute(atrKey));
+        System.out.println(Arrays.toString(request.getCookies()));
+    }
+    public static String getSession(){
+        return (String) session.getAttribute("sessionID");
     }
 
     @PostMapping("/add")
