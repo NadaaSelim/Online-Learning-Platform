@@ -28,4 +28,15 @@ public class Course {
     private List<Student> students = new ArrayList<>();
     private boolean published=false;
     private double averageRating=0;
+
+    public Course(Course course) {
+        this.id = course.getId();
+        this.name = course.getName();
+        this.instructor = course.getInstructor();
+        this.duration = course.getDuration();
+        this.capacity = course.getCapacity();
+        this.category = course.getCategory();
+        this.published = course.isPublished();
+        this.averageRating = course.getAverageRating();
+    }
 }

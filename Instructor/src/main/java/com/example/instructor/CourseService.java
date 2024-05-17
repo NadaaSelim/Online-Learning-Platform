@@ -42,7 +42,7 @@ public class CourseService {
     }
 
     @CircuitBreaker(name="ViewCourses", fallbackMethod = "fallBackCourses")
-    public ResponseEntity<Object> getAllCourses() {
+    public List<Course> getAllCourses() {
         try {
         // Get the service instance information from Eureka
         String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
@@ -52,7 +52,7 @@ public class CourseService {
             ObjectMapper objectMapper = new ObjectMapper();
         List<Course> courses = null;
         courses = objectMapper.readValue(jsonResponse, new TypeReference<List<Course>>() {});
-            return  new ResponseEntity<>(courses, HttpStatus.OK);
+            return  courses;
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Service failed!", e);
         }

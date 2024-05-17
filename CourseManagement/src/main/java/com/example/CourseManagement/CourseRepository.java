@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 @Repository
 public interface CourseRepository extends MongoRepository<Course, String> {
 
-    List<Course> findAllByOrderByAverageRatingDesc();
+//    List<Course> findAllByOrderByAverageRatingDesc();
     List<Course> findCoursesByNameContainingIgnoreCase(String name);
 //    @Aggregation(pipeline = {
 //            "{ $match: { published: true } }",
@@ -32,21 +32,15 @@ public interface CourseRepository extends MongoRepository<Course, String> {
     List<Course> findByCategory(Category name);
     List<Course> findByStudents_IdAndStudents_Status(String studentId, Status status);
 
-    List<Course> findCoursesByPublishedTrue();
     boolean existsByIdAndStudentsId(String courseId, String studentId);
-    //Student findByIdAndStudentsId(String courseId, String studentId);
     int countStudentsByIdAndStudentsStatus(String courseId, Status status);
     boolean existsByIdAndStudentsIdAndStudentsStatus(String courseId, String studentId,Status status);
 
-    List<Course> findCoursesByPublishedFalse();
-
-    List<Course> findByPublishedFalse();
-
-    List<Course> findByPublishedTrue();
 
     List<Course> findByPublished(boolean b);
 
     List<Course> findByStudents_Id(String studentid);
+
     //boolean existsByIdAndInstructor_Id(String courseId,String instructorId)
     //void removeByIdAndStudentsId(String courseId,String studentId);
 }

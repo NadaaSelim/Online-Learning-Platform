@@ -42,7 +42,7 @@
 
 <script>
     const form = document.getElementById("addForm");
-    form.addEventListener("submit", async (event) => {
+    form.addEventListener("submit",  (event) => {
         event.preventDefault();
 
         const name = document.getElementById("name").value;
@@ -62,7 +62,7 @@
             }
         };
 
-        const response = await fetch("api/courses/add", {
+        const response =  fetch("api/courses/add", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -74,7 +74,7 @@
         if (response.ok) {
             alert("Course added successfully and to be reviewed!");
         } else {
-            alert("Error adding course:", await response.text());
+            alert("Error adding course:",  response.text());
         }
     });
 
