@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Courses</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>.hidden { display: none; }</style>
+</head>
+<body>
+
+<h2>Search Courses</h2>
+<div class="mb-3">
+    <input type="text" id="searchInput" class="form-control" placeholder="Search by name">
+</div>
+
+<div class="mb-3">
+    <label for="categoryFilter">Filter by Category:</label>
+    <select id="categoryFilter" class="form-control">
+        <option value="">All Categories</option>
+        <option value="HU">HU</option>
+        <option value="SCI">SCI</option>
+        <option value="TECH">TECH</option>
+    </select>
+</div>
+
+<div class="mb-3">
+    <label for="sortSelect">Sort by:</label>
+    <select id="sortSelect" class="form-control">
+        <option value="name">Name (A-Z)</option>
+        <option value="ratingDesc">Rating (High to Low)</option>
+        <option value="ratingAsc">Rating (Low to High)</option>
+    </select>
+</div>
+
+<table class="table" id="courseTable">
+    <thead>
+    <tr>
+        <th>Course Name</th>
+        <th>Instructor</th>
+        <th>Duration</th>
+        <th>Capacity</th>
+        <th>Category</th>
+        <th>Rating</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script th:inline="javascript">
+    $(document).ready(function() {
+        // const studentId = $("#studId").val(); // Get studentId from URL parameter
+        let courses = [];
+
+        // Fetch courses initially
+        $.ajax({
+            url: "/api/courses",
+            success: function(data) {
+                courses = data;
+                updateCourseTable();
+            },
+            error: function(error) {
+                alert("Error fetching courses.");
+            }
+        });
+
+        $("#searchInput, #categoryFilter, #sortSelect").on("input change", updateCourseTable); // Combined event handler
+
+        function updateCourseTable() {
+            const searchText = $("#searchInput").val().toLowerCase();
+            const category = $("#categoryFilter").val();
+            const sort = $("#sortSelect").val();
+
+            const filteredCourses = courses.filter(course => {
+                const matchesSearch = course.name.toLowerCase().includes(searchText);
+                const matchesCategory = !category || course.category === category;
+                return matchesSearch && matchesCategory;
+            });
+
+            filteredCourses.sort((a, b) => {
+                if (sort === "name") {
+                    return a.name.localeCompare(b.name);
+                } else if (sort.startsWith("rating")) {
+                    const asc = sort === "ratingAsc";
+                    return asc ? a.averageRating - b.averageRating : b.averageRating - a.averageRating;
+                }
+            });
+
+            const tableBody = $("#courseTable tbody");
+            tableBody.empty();
+            filteredCourses.forEach(course => {
+                tableBody.append(`<tr>
+                    <td>${course.name}</td>
+                    <td>${course.instructor.instructorName}</td>
+                    <td>${course.duration}</td>
+                    <td>${course.capacity}</td>
+                    <td>${course.category}</td>
+                    <td>${course.averageRating}</td>
+
+                </tr>`);
+            });
+
+        //    attachEventHandlers(studentId); // Attach event handlers after updating the table
+        }
+
+
+    });
+</script>
+
+</body>
+</html>

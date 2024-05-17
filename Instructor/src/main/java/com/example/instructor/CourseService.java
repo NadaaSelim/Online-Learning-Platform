@@ -112,15 +112,23 @@ public class CourseService {
 
     public String accept(String courseid, String studentid, String instrId) {
         String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
-        return restTemplate.exchange(courseServiceUrl+"/api/courses/accept/"+courseid+"/"+studentid+"/"+instrId+"/",HttpMethod.PUT,null,String.class).getBody();
+        return restTemplate.exchange(courseServiceUrl+"/api/courses/accept/"+courseid+"/"+studentid+"/"+instrId,HttpMethod.PUT,null,String.class).getBody();
 
 
     }
 
     public String reject(String courseid, String studentid, String instrId) {
         String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
-        return restTemplate.exchange(courseServiceUrl+"/api/courses/reject/"+courseid+"/"+studentid+"/"+instrId+"/",HttpMethod.PUT,null,String.class).getBody();
+        return restTemplate.exchange(courseServiceUrl+"/api/courses/reject/"+courseid+"/"+studentid+"/"+instrId,HttpMethod.PUT,null,String.class).getBody();
 
+
+    }
+
+    public List<Course> getPendingCourses(String instructorid) {
+        String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
+        return restTemplate.exchange(courseServiceUrl+"/api/courses/enrollements?instructorid="+instructorid
+                ,HttpMethod.GET,null,
+                new ParameterizedTypeReference<List<Course>>() {}).getBody();
 
     }
 }

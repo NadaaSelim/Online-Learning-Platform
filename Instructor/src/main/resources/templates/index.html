@@ -9,6 +9,8 @@
 <body>
 <h1>Welcome Back!</h1>
 <h2>Available Courses</h2>
+
+<input type="hidden" id ="instrId" name="instrId" th:value="${instrId}" />
 <table class="table">
     <thead>
     <tr>
@@ -17,13 +19,17 @@
         <th>Duration</th>
         <th>Capacity</th>
         <th>Category</th>
-        <th>Action</th>
     </tr>
     </thead>
     <tbody>
     </tbody>
 </table>
+<div class="d-flex flex-column justify-content-sm-center mx-auto  p-5">
+
 <button id="viewEnrollmentsBtn" class="btn btn-success mt-3 d-block mx-auto">View Course Enrollments</button>
+<a  class="btn btn-primary mt-3  mx-auto" href="/add" role="button"> Add Course</a>
+    <a  class="btn btn-primary mt-3  mx-auto" href="/search" role="button"> Search & Filter</a>
+</div>
 <script th:inline="javascript">
     $(document).ready(function() {
         $.ajax({
@@ -33,27 +39,29 @@
                 courses.forEach(course => {
                     const newRow = `<tr>
                             <td>${course.name}</td>
-                            <td></td>
+                            <td>${course.instructor.instructorName}</td>
                             <td>${course.duration}</td>
                             <td>${course.capacity}</td>
-                            <td>${course.category}</td>
+                           <td>${course.category}</td>
 
                         </tr>`;
                     tableBody.append(newRow);
                 });
-
-//                attachEventHandlers(studentId);
+               attachEventHandlers();
             },
             error: function(error) {
                 alert("Error fetching courses.");
             }
         });
 
-        function attachEventHandlers(studentId) {
+        function attachEventHandlers() {
+            // Check the output in the browser console
 
-            // $("#viewEnrollmentsBtn").click(function () {
-            //     window.location.href = "/enrollments?studentid="+studentId;
-            // });
+            $("#viewEnrollmentsBtn").click(function () {
+                const instrId = $("#instrId").val();
+                console.log("instrId value:", instrId);
+                window.location.href = "/enrollements?instructorid="+instrId;
+            });
         }
     });
 </script>
