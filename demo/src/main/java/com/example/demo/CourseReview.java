@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.io.IOException;
 import java.net.URI;
@@ -20,13 +21,13 @@ import java.util.List;
 @WebServlet(name = "review", value = "/review")
 public class CourseReview extends HttpServlet {
 
-    public void init() {
+    @EJB
+    IRequester requester;
 
-    }
 
     public void doGet(HttpServletRequest req, HttpServletResponse response) throws IOException, ServletException {
 
-        List<Course> courses = getCourses("http://localhost:8081/api/courses/unpub");
+        List<Course> courses = requester.fetchDataFromUrl("http://localhost:8081/api/courses/unpub",Course.class);
 
         req.setAttribute("courses", courses);
         response.setContentType("text/html");
@@ -52,6 +53,9 @@ public class CourseReview extends HttpServlet {
             e.printStackTrace();
         }
         return null;
+    }
+    public void init() {
+        requester = new Requester();
     }
     public void destroy() {
     }

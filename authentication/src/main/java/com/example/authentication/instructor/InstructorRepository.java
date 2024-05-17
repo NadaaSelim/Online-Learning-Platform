@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface InstructorRepository extends MongoRepository<Instructor, String>{
 
     Optional<Instructor> findInstructorByEmail(String email);
+    Instructor findInstructorById(String id);
 }
