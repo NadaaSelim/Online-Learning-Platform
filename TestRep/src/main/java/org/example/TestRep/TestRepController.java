@@ -240,6 +240,20 @@ public class TestRepController {
         return  examRepository.findAll();
 
     }
+    @PutMapping("/register/{examId}")
+    public boolean register(@PathVariable("examId") String examId,@RequestBody Student student){
+        Optional<Exam> optionalExam = examRepository.findById(examId);
+        if(optionalExam.isPresent()){
+
+            Exam exam = optionalExam.get();
+            exam.getStudents().add(student);
+            examRepository.save(exam);
+
+            return true;
+
+        }
+        return  false;
+    }
 }
 
     //@PutMapping("/register/{")
