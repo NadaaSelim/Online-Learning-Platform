@@ -23,7 +23,6 @@ public class CoursesController {
     }
 
     @GetMapping("")
-
     public ResponseEntity<Object> getAllCourses() {
         return courseService.getAllCourses();
     }
@@ -65,7 +64,15 @@ public class CoursesController {
     }
 
     // accept
+    @PutMapping("/accept/{courseid}/{studentid}/{instrId}")
+    public String accept(@PathVariable("courseid") String courseid, @PathVariable("studentid") String studentid, @PathVariable("instrId") String instrId){
+        return courseService.accept(courseid,studentid,instrId);
+    }
     // reject
+    @PutMapping("/reject/{courseid}/{studentid}/{instrId}")
+    public String reject(@PathVariable("courseid") String courseid, @PathVariable("studentid") String studentid, @PathVariable("instrId") String instrId){
+        return courseService.reject(courseid,studentid,instrId);
+    }
 
 
 

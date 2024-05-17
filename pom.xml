@@ -16,6 +16,8 @@
     <module>Student</module>
     <module>kafka</module>
     <module>Instructor</module>
+    <module>TestRep</module>
+
   </modules>
 
   <properties>

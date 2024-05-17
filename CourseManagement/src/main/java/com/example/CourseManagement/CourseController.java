@@ -165,6 +165,10 @@ public class CourseController {
         return "Student has been rejected";
     }
 
+    @GetMapping("/enrollments")
+    public List<Course> getEnrollments(@RequestParam("studentid") String studentid){
+        return courserepo.findByStudents_Id(studentid);
+    }
 
 }
 
