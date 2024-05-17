@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -23,8 +24,12 @@ public class CoursesController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Object> getAllCourses() {
-        return courseService.getAllCourses();
+    public List<Course> getAllCourses(Model model) {
+
+        List<Course> courses = (List<Course>) courseService.getAllCourses();
+        model.addAttribute("courses", courses);
+        return courses;
+
     }
 
     @PostMapping("/add")
@@ -74,7 +79,7 @@ public class CoursesController {
         return courseService.reject(courseid,studentid,instrId);
     }
 
-
+//    @GetMapping("/viewEnrollements/")
 
 
 

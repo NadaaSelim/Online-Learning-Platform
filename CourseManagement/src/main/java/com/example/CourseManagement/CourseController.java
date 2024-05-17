@@ -6,6 +6,7 @@ import com.example.CourseManagement.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -169,6 +170,28 @@ public class CourseController {
     public List<Course> getEnrollments(@RequestParam("studentid") String studentid){
         return courserepo.findByStudents_Id(studentid);
     }
+//    @GetMapping("/enrollements")
+//    public List<Course> getInsEnrollements(@RequestParam("instructorid") String instructorid){
+//        List<Course> courses = courserepo.findByPublished(true);
+//        courses.stream().filter(course -> course.getInstructor().getId().equals(instructorid));
+//        List<Course> coursesWithPending = new ArrayList<>();
+//        for (Course course : courses) {
+//            List<Student> pending = new ArrayList<>();
+//            for (Student student : course.getStudents()) {
+//                if(student.getStatus() == Status.PENDING) {
+//                        pending.add(student);
+//                }
+//            }
+//            if(pending.size() > 0) {
+//                Course newC = new Course(course);
+//                newC.setStudents(pending);
+//                coursesWithPending.add(newC);
+//            }
+//        }
+//        return coursesWithPending;
+//
+//        }
+
 
 }
 

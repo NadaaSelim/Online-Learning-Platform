@@ -22,15 +22,22 @@ public class UIController {
         this.eurekaClient = eurekaClient;
         this.restTemplate = restTemplate;
     }
+
+    @GetMapping("")
+    public ModelAndView index() {
+
+        return new ModelAndView("home.html");
+    }
     @GetMapping("/add")
-    public ModelAndView home() {
+    public ModelAndView addCourse() {
         String authServiceUrl = eurekaClient.getNextServerFromEureka("AUTHENTICATION", false).getHomePageUrl();
         String id = CoursesController.getSession();
         System.out.println("ID IS "+id);
         Instructor instructor = restTemplate.getForObject(authServiceUrl + "/api/instructors/" + id, Instructor.class);
         ModelAndView modelAndView = new ModelAndView("addCourse.html");
         modelAndView.addObject("id", instructor.getId());
-        modelAndView.addObject("instructorName", instructor.getInstructorName());
+        System.out.println(instructor.getId()+instructor.getInstructorName());
+        modelAndView.addObject("instructorName", "");
 
         return modelAndView;
         //return "index";
