@@ -1,10 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Update Center Info</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+<div class="container mt-5">
+    <h2>Update Center Information</h2>
+    <form id="updateCenterForm">
+        <input type="hidden" id="repId" th:value="${repId}" />
 
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" class="form-control" id="address" name="address" required>
+        </div>
+
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+        </div>
+
+        <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea class="form-control" id="bio" name="bio" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Information</button>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#updateCenterForm').on('submit', function(event) {
+            event.preventDefault();
+
+            const repId = $('#repId').val();
+            const name = $('#name').val();
+            const email = $('#email').val();
+            const address = $('#address').val();
+            const location = $('#location').val();
+            const bio = $('#bio').val();
+
+            const centerData = {
+                name: name,
+                email: email,
+                address: address,
+                location: location,
+                bio: bio
+            };
+
+            $.ajax({
+                url: `/Center/updateInfo/${repId}`,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(centerData),
+                success: function(response) {
+                    alert('Center information updated successfully');
+                },
+                error: function(error) {
+                    alert('Error updating center information');
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

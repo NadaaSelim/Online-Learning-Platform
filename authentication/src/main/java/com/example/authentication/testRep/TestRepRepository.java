@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface TestRepRepository extends MongoRepository<TestRep, String> {
 
     TestRep findTestRepById(String id);
-    Optional<TestRep> findTestRepByByEmail(String email);
+    Optional<TestRep> findTestRepByEmail(String email);
 }

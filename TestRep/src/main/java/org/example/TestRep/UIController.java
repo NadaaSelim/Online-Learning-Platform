@@ -6,15 +6,20 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RestController("")
 public class UIController {
+    private final String TESTID = "";
     @GetMapping("")
     public ModelAndView home(){
         ModelAndView mv = new ModelAndView("home.html");
+        String id = TestRepController.getSession();
+        System.out.println("ID IS: " + id);
         return mv;
     }
     @GetMapping("/add")
     public ModelAndView addExam(){
         ModelAndView mv = new ModelAndView("addExam.html");
-        String id = "id";
+        String id = TestRepController.getSession();
+        //String id = TESTID;
+        System.out.println("ID IS: " + id);
         mv.addObject("repId", id);
         return mv;
     }

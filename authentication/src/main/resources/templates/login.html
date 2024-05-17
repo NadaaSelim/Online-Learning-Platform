@@ -51,6 +51,19 @@
                 }
                 throw new Error('Instructor login failed');
             });
+        const testRepRequest = fetch('/api/TestRep/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formData // Use the formatted data as the request body
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Return the response body as JSON
+                }
+                throw new Error('TestRep login failed');
+            });
 
         // Call the student login API
         const studentRequest = fetch('/api/students/login', {
@@ -68,9 +81,11 @@
             });
 
         // Process responses from both APIs
-        Promise.all([instructorRequest, studentRequest])
-            .then(([instructorResponse, studentResponse]) => {
+        Promise.all([instructorRequest, studentRequest, testRepRequest])
+            .then(([instructorResponse, studentResponse, testRepResponse]) => {
                 // Handle responses from both APIs here
+                console.log('TestRep response:', testRepResponse);
+
                 console.log('Instructor response:', instructorResponse);
                 console.log('Student response:', studentResponse);
 
@@ -78,7 +93,9 @@
                 if (instructorResponse === 1) {
                     displayResponse("Login Successful As Instructor",2);
                 } else if (studentResponse === 1) {
-                    displayResponse("Login Successful As Student",1);
+                    displayResponse("Login Successful As Student", 1);
+                }else if (testRepResponse === 1) {
+                        displayResponse("Login Successful As TestRep", 3);
                 } else if(studentResponse === 0 || instructorResponse===0 ){
                     displayResponse("Wrong Password",0);
                     // None of the responses are 1
@@ -99,7 +116,8 @@
             return window.location.href = "http://localhost:8082"
         if(flag===2)
             return window.location.href = "http://localhost:8083"
-
+        if(flag===3)
+            return window.location.href = "http://localhost:8085"
         document.body.innerHTML = '';
         const heading = document.createElement('h3');
         heading.textContent = response;

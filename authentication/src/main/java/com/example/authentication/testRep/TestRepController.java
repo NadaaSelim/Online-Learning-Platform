@@ -35,7 +35,7 @@ public class TestRepController {
 
     @PostMapping("/login")
     public int loginTestRep(@ModelAttribute TestRep testRep) {
-        TestRep testRep1 = testRepRepository.findTestRepByByEmail(testRep.getEmail()).orElse(null);
+        TestRep testRep1 = testRepRepository.findTestRepByEmail(testRep.getEmail()).orElse(null);
         if (testRep1 == null) {
             //return "Student not found, Please create an account";
             return -1;
@@ -43,7 +43,7 @@ public class TestRepController {
         if (testRep1.getPassword().equals(testRep.getPassword())) {
             String courseServiceUrl = eurekaClient.getNextServerFromEureka("testrep-service", false).getHomePageUrl();
 
-            restTemplate.getForObject(courseServiceUrl+"/api/courses/set/"+testRep1.getId()
+            restTemplate.getForObject(courseServiceUrl+"/Center/set/"+testRep1.getId()
                     ,String.class);
 
             return 1;

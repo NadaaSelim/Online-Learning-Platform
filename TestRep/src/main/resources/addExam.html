@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<html xmlns:th="https://thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -9,6 +8,73 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+<div class="container mt-5">
+    <h2>Add Exam</h2>
+    <form id="addExamForm">
+        <input type="hidden" id="repId" th:value="${repId}" />
 
+        <div class="form-group">
+            <label for="name">Exam Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="duration">Duration</label>
+            <input type="number" class="form-control" id="duration" name="duration" required>
+        </div>
+
+        <div class="form-group">
+            <label>Dates</label>
+            <div id="dates-container">
+                <div class="date-input">
+                    <input type="date" class="form-control mb-2" name="dates">
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary" id="add-date-btn">Add Another Date</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Exam</button>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#add-date-btn').click(function() {
+            $('#dates-container').append('<div class="date-input"><input type="date" class="form-control mb-2" name="dates"></div>');
+        });
+
+        $('#addExamForm').on('submit', function(event) {
+            event.preventDefault();
+
+            const repId = $('#repId').val();
+            const name = $('#name').val();
+            const duration = $('#duration').val();
+            const dates = [];
+
+            $('input[name="dates"]').each(function() {
+                dates.push($(this).val());
+            });
+
+            const examData = {
+                name: name,
+                duration: duration,
+                dates: dates
+            };
+
+            $.ajax({
+                url: `/Center/addExam/${repId}`,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(examData),
+                success: function(response) {
+                    alert('Exam created successfully');
+                },
+                error: function(error) {
+                    alert('Error creating exam');
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
