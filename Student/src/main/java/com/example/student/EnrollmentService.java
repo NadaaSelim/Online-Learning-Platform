@@ -38,6 +38,7 @@ public class EnrollmentService {
         if(courses != null){
             List<UiEnrollment> uiEnrollments = courses.stream().map(course -> {
                 UiEnrollment uiEnrollment = new UiEnrollment();
+                uiEnrollment.setId(course.getId());
                 uiEnrollment.setName(course.getName());
                 uiEnrollment.setInstructor(course.getInstructor().getInstructorName());
                 uiEnrollment.setCategory(course.getCategory());

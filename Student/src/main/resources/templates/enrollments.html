@@ -2,13 +2,36 @@
 <html xmlns:th="https://thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Home Page</title>
+    <title>Student Enrollments</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+    </style>
+
 </head>
 <body>
+
 <h1>Course Enrollments</h1>
-<input type="hidden" id ="studId" name="studId" th:value="${studentid}" />
+<input type="hidden" id="studId" name="studId" th:value="${studentid}" />
+
+<div id="reviewPopup" class="popup">
+    <h2>Write a Review</h2>
+    <textarea id="reviewText" placeholder="Your Review"></textarea><br>
+    <label for="rating">Rating (1-5):</label>
+    <input type="number" id="rating" min="1" max="5"><br>
+    <button id="submitReview">Submit</button>
+</div>
+
 <table class="table">
     <thead>
     <tr>
@@ -16,6 +39,7 @@
         <th>Instructor</th>
         <th>Category</th>
         <th>Status</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -25,26 +49,61 @@
 <script th:inline="javascript">
     $(document).ready(function() {
         const studentId = $("#studId").val();
+
+        function attachEventHandlers(studentId) {
+            $(document).on("click", ".review-btn", function() { // Use delegated event handling
+                const courseId = $(this).data("course");
+                console.log(courseId); // This should now log the correct courseId
+
+                // Show the popup
+                $("#reviewPopup").show();
+
+                $("#submitReview").click(function() {
+                    const reviewText = $("#reviewText").val();
+                    const rating = $("#rating").val();
+                    $("#reviewPopup").hide();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/courses/review/" + courseId + "/" + studentId,
+                        contentType: "application/json",
+                        data: JSON.stringify({ "comment": reviewText, "rating": rating }),
+                        success: function(response) {
+                            alert("Review added successfully.");
+                        },
+                        error: function(error) {
+                            alert("Error adding review.");
+                        }
+                    });
+                });
+            });
+        }
+
         $.ajax({
-            url: "/api/enrollments/all?studentid="+ studentId,
+            url: "/api/enrollments/all?studentid=" + studentId,
             success: function(courses) {
                 const tableBody = $("table tbody");
                 courses.forEach(course => {
+                    let actionButton = "";
+                    if (course.status === "ACCEPTED") {
+                        actionButton = `<button class="btn btn-primary review-btn" data-course="${course.id}">Review</button>`;
+                    }
                     const newRow = `<tr>
                             <td>${course.name}</td>
                             <td>${course.instructor}</td>
                             <td>${course.category}</td>
                             <td>${course.status}</td>
+                            <td>${actionButton}</td>
                         </tr>`;
                     tableBody.append(newRow);
                 });
 
+                attachEventHandlers(studentId);
             },
             error: function(error) {
                 alert("Error fetching courses.");
             }
         });
-
     });
 </script>
 </body>
