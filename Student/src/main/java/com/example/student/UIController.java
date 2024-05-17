@@ -49,4 +49,12 @@ public class UIController {
         return modelAndView;
     }
 
+    @GetMapping("/centers")
+    public ModelAndView centers(@RequestParam("studentid") String studentid){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("centers.html");
+        modelAndView.addObject("studentid", studentid);
+        return modelAndView;
+    }
+
 }

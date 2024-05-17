@@ -47,6 +47,7 @@
 <div class="btn-container">
     <button id="viewEnrollmentsBtn" class="btn btn-success">View Course Enrollments</button>
     <button id="searchCoursesBtn" class="btn btn-success">Search Courses and Enroll</button>
+    <button id="centerBtn" class="btn btn-success">View Test Centers</button>
 </div>
 
 
@@ -59,12 +60,15 @@
 
             $("#viewEnrollmentsBtn").click(function () {
                 window.location.href = "/enrollements?studentid="+studentId;
-<<<<<<< Updated upstream
+
             });
             $("#searchCoursesBtn").click(function () {
                 window.location.href = "/search?studentid="+studentId;
-=======
->>>>>>> Stashed changes
+
+            });
+            $("#centerBtn").click(function () {
+                window.location.href = "/centers?studentid="+studentId;
+
             });
         }
 </script>
