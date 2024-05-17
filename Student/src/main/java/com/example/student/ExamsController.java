@@ -1,9 +1,8 @@
 package com.example.student;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.student.model.Student;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
@@ -18,15 +17,20 @@ public class ExamsController {
         this.examsService = examsService;
     }
 
-    @GetMapping("/all")
+    @GetMapping("/all/{centerId}")
     //Todo implement this method
-    public String getAllExams(){
-        return "All Exams";
+    public List<Exam> getAllExams(@PathVariable("centerId") String centerId){
+        return examsService.getAllExams(centerId);
     }
 
     @GetMapping("/centers")
     public List<Center> getCenters(){
         return examsService.getCenters();
+    }
+
+    @PostMapping("/register/{examId}")
+    public boolean register(@PathVariable("examId") String examId, @RequestBody Student student){
+        return examsService.register(examId, student);
     }
 
 }

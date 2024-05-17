@@ -9,7 +9,7 @@
 <body>
 
 <h2>Search Centers</h2>
-
+<input type="hidden" id="studId" name="studId" th:value="${studentid}" />
 <div class="mb-3">
     <input type="text" id="searchInput" class="form-control" placeholder="Search by name">
 </div>
@@ -17,6 +17,11 @@
 <div class="mb-3">
     <label for="addressFilter">Filter by Address:</label>
     <input type="text" id="addressFilter" class="form-control" placeholder="Enter address">
+</div>
+
+<div id="examPopup" class="popup">
+    <h2>Exams at <span id="centerName"></span></h2>
+    <ul id="examList"></ul>
 </div>
 
 <table class="table" id="centerTable">
@@ -35,7 +40,7 @@
 <script th:inline="javascript">
     $(document).ready(function() {
         let centers = [];
-
+        const studentId = $("#studId").val();
         // Fetch centers initially
         $.ajax({
             url: "/api/exams/centers", // Replace with your actual API endpoint for fetching centers
@@ -68,7 +73,63 @@
                     <td>${center.email}</td>
                     <td>${center.address}</td>
                     <td>${center.location}</td>
+                    <td><button class="btn btn-info view-exams-btn" data-center-id="${center.id}">View Exams</button></td>
                 </tr>`);
+            });
+
+            attachEventHandlers(studentId); // Attach event handlers after updating
+        }
+
+        function attachEventHandlers() {
+            $(".view-exams-btn").click(function() {
+                const centerId = $(this).data("center-id");
+                const centerName = $(this).closest('tr').find('td:first-child').text(); // Get center name
+
+                // Fetch exams for this center
+                $.ajax({
+                    url: "/api/exams/all/" + centerId,
+                    success: function(exams) {
+                        $("#centerName").text(centerName);
+                        const examList = $("#examList");
+                        examList.empty();
+
+                        if (exams.length === 0) {
+                            examList.append("<li>No exams found for this center.</li>");
+                        } else {
+                            exams.forEach(exam => {
+                                // Assuming exam.dates is an array of LocalDate objects
+                                const formattedDates = exam.dates.map(date => date.toString()).join(", "); // Format dates
+                                examList.append(`<li>
+                                 <b>${exam.name}</b> - Duration: ${exam.duration} Hours<br>
+                                 Dates: ${formattedDates}
+                                 <button class="btn btn-success register-btn" data-exam-id="${exam.id}">Register</button>
+                              </li>`);
+                            });
+                        }
+
+                        // Show the popup
+                        $("#examPopup").show();
+                    },
+                    error: function(error) {
+                        alert("Error fetching exams for this center.");
+                    }
+                });
+
+                $(document).on("click", ".register-btn", function() {
+                    const examId = $(this).data("examId");
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/exams/" + examId + "/register/" + studentId,
+                        success: function(response) {
+                            alert("Registered for the exam successfully!");
+                        },
+                        error: function(error) {
+                            alert("Error registering for the exam.");
+                        }
+                    });
+                });
+            }
             });
         }
     });
