@@ -45,8 +45,7 @@ public class CourseService {
     public ResponseEntity<Object> getAllCourses() {
         try {
         // Get the service instance information from Eureka
-        String courseServiceUrl = "http://localhost:8081";
-                //eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
+        String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
 
         // Use RestTemplate with the resolved service URL
             String jsonResponse =   restTemplate.getForObject(courseServiceUrl + "/api/courses", String.class);
