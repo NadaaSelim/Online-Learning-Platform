@@ -217,6 +217,31 @@ public class TestRepController {
     }
 
     // testcenters
+    @GetMapping("/all")
+    public List<Center> getCenters(){
+        List<Center> centers = centerRepository.findAll();
+        return centers;
+
+    }
+
+    @GetMapping("/history/{studId}")
+    public List<Integer> getStudentGrades(@PathVariable("studId") String studId) {
+        List<Exam> exams = examRepository.findAll();
+        List<Integer> grades = new ArrayList<>();
+
+        for (Exam exam : exams) {
+            List<Student> students = exam.getStudents();
+            for (Student student : students) {
+                if (student.getId().equals(studId)) {
+                    grades.add(student.getGrade());
+                }
+            }
+        }
+
+        return grades;
+    }
+
+    //@PutMapping("/register/{")
 
 
 
