@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class UiEnrollment {
 
+
+    private String id;
     private String name;
     private String instructor;
     private Category category;
