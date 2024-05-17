@@ -28,6 +28,11 @@ public class UIController {
 
         return new ModelAndView("index.html");
     }
+    @GetMapping("/search")
+    public ModelAndView search() {
+
+        return new ModelAndView("search.html");
+    }
     @GetMapping("/add")
     public ModelAndView addCourse() {
         String authServiceUrl = eurekaClient.getNextServerFromEureka("AUTHENTICATION", false).getHomePageUrl();
