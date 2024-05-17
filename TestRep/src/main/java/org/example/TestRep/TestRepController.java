@@ -20,14 +20,14 @@ public class TestRepController {
     private final CenterRepository centerRepository;
     private final ExamRepository examRepository;
 
-    public TestRepController(TestRepRepository testRepRepository, CenterRepository centerRepository, ExamRepository examRepository){
+    public TestRepController(TestRepRepository testRepRepository, CenterRepository centerRepository, ExamRepository examRepository) {
         this.testRepRepository = testRepRepository;
         this.centerRepository = centerRepository;
         this.examRepository = examRepository;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> maketestrep(@RequestBody TestRep testRep){
+    public ResponseEntity<String> maketestrep(@RequestBody TestRep testRep) {
         try {
             // Insert the TestRep document
             testRepRepository.insert(testRep);
@@ -49,17 +49,16 @@ public class TestRepController {
             TestRep testRep = optionalTestRep.get();
 
 
-            if(testRep.getCenter() != null){
+            if (testRep.getCenter() != null) {
                 String Cid = testRep.getCenter().getId();
-                Optional<Center> optionalCenter =centerRepository.findById(Cid);
+                Optional<Center> optionalCenter = centerRepository.findById(Cid);
                 c = optionalCenter.get();
                 c.setAddress(center.getAddress());
                 c.setLocation(center.getLocation());
                 c.setBio(center.getBio());
                 c.setEmail(center.getEmail());
                 centerRepository.save(c);
-            }
-            else{
+            } else {
                 c = centerRepository.insert(center);
             }
 
@@ -79,7 +78,7 @@ public class TestRepController {
 
     //create exams
     @PostMapping("/addExam/{id}")
-    public ResponseEntity<String> createExam (@PathVariable("id") String testRepId , @RequestBody Exam exam){
+    public ResponseEntity<String> createExam(@PathVariable("id") String testRepId, @RequestBody Exam exam) {
         try {
 
             Optional<TestRep> optionalTestRep = testRepRepository.findById(testRepId);
@@ -90,9 +89,9 @@ public class TestRepController {
                 String cid = testRep.getCenter().getId();
                 exam.setCid(cid);
                 // validate the dates are not duplicates
-                List<LocalDate> dates =exam.getDates();
+                List<LocalDate> dates = exam.getDates();
                 Set<LocalDate> uniqueDates = new HashSet<>(dates);
-                if(uniqueDates.size() != dates.size()){
+                if (uniqueDates.size() != dates.size()) {
                     return ResponseEntity.status(HttpStatus.CONFLICT).body("duplicated dates");
 
                 }
@@ -100,11 +99,9 @@ public class TestRepController {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Exam document created successfully.");
 
 
-            }
-            else {
+            } else {
                 return ResponseEntity.notFound().build();
             }
-
 
 
         } catch (Exception e) {
@@ -115,7 +112,7 @@ public class TestRepController {
 
     //set grades for students
     @PutMapping("/setGrade/{testRepId}/{examId}/{studId}")
-    public ResponseEntity<String> setGrade(@PathVariable("testRepId") String testRepId,@PathVariable("examId") String examId, @PathVariable("studId")String studId,@RequestBody Integer grade ){
+    public ResponseEntity<String> setGrade(@PathVariable("testRepId") String testRepId, @PathVariable("examId") String examId, @PathVariable("studId") String studId, @RequestBody Integer grade) {
 
         try {
 
@@ -127,9 +124,9 @@ public class TestRepController {
                 String cid = testRep.getCenter().getId();
 
                 Optional<Exam> optionalExam = examRepository.findById(examId);
-                if(optionalExam.isPresent()){
+                if (optionalExam.isPresent()) {
                     Exam exam = optionalExam.get();
-                    if(exam.getCid().equals(cid)){
+                    if (exam.getCid().equals(cid)) {
                         Optional<Student> optionalStudent = exam.getStudents().stream()
                                 .filter(student -> student.getId().equals(studId))
                                 .findFirst();
@@ -137,29 +134,25 @@ public class TestRepController {
                             Student student = optionalStudent.get();
                             student.setGrade(grade);
                             examRepository.save(exam);
-                           return ResponseEntity.status(HttpStatus.CREATED).body("grade added successfully.");
+                            return ResponseEntity.status(HttpStatus.CREATED).body("grade added successfully.");
 
-                        }
-                        else{
+                        } else {
                             return ResponseEntity.notFound().build();
                         }
 
 
-                    }else {
+                    } else {
                         return ResponseEntity.notFound().build();
                     }
-                }
-                else{
+                } else {
                     return ResponseEntity.notFound().build();
 
 
                 }
 
-            }
-            else {
+            } else {
                 return ResponseEntity.notFound().build();
             }
-
 
 
         } catch (Exception e) {
@@ -171,9 +164,9 @@ public class TestRepController {
 
     //view exams
     @GetMapping("/exams/{testRepId}")
-    public List<Exam> getExams(@PathVariable("testRepId") String testRepId ){
+    public List<Exam> getExams(@PathVariable("testRepId") String testRepId) {
         Optional<TestRep> optionalTestRep = testRepRepository.findById(testRepId);
-        if(optionalTestRep.isPresent()){
+        if (optionalTestRep.isPresent()) {
             TestRep testRep = optionalTestRep.get();
             List<Exam> exams = examRepository.findByCid(testRep.getCenter().getId());
             return exams;
@@ -181,29 +174,29 @@ public class TestRepController {
 
         }
         return null;
-}
+    }
+
     // view students grades of exams
     @GetMapping("/grades/{examId}")
-    public List<Integer> getGrades(@PathVariable("examId") String examId){
+    public List<Integer> getGrades(@PathVariable("examId") String examId) {
 
-            Optional<Exam> optionalExam = examRepository.findById(examId);
-            if (optionalExam.isPresent()) {
-                Exam exam = optionalExam.get();
-                List<Integer> grades = exam.getStudents().stream()
-                        .map(Student::getGrade)
-                        .collect(Collectors.toList());
+        Optional<Exam> optionalExam = examRepository.findById(examId);
+        if (optionalExam.isPresent()) {
+            Exam exam = optionalExam.get();
+            List<Integer> grades = exam.getStudents().stream()
+                    .map(Student::getGrade)
+                    .collect(Collectors.toList());
 
-                return grades;
-            } else {
-                return null;
-            }
+            return grades;
+        } else {
+            return null;
         }
-
     }
+
 
     // testcenters
     @GetMapping("/all")
-    public List<Center> getCenters(){
+    public List<Center> getCenters() {
         List<Center> centers = centerRepository.findAll();
         return centers;
 
@@ -225,6 +218,8 @@ public class TestRepController {
 
         return grades;
     }
+
+}
 
     //@PutMapping("/register/{")
 
