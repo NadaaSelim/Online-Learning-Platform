@@ -27,11 +27,19 @@ public class UIController {
     @GetMapping("/update")
     public ModelAndView updateInfo(){
         ModelAndView mv = new ModelAndView("updateInfo.html");
+        String id = TestRepController.getSession();
+
+        System.out.println("ID IS: " + id);
+        mv.addObject("repId", id);
         return mv;
     }
     @GetMapping("/view")
     public ModelAndView viewExam(){
         ModelAndView mv = new ModelAndView("viewExam.html");
+        String id = TestRepController.getSession();
+
+        System.out.println("ID IS: " + id);
+        mv.addObject("repId", id);
         return mv;
     }
 }

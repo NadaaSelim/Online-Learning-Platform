@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>Update Center Info</title>
@@ -53,6 +52,11 @@
             const address = $('#address').val();
             const location = $('#location').val();
             const bio = $('#bio').val();
+
+            console.log("Email: " + email);
+            console.log("ID: " + repId);
+            console.log("Location: " + location);
+            console.log("Address: " + address);
 
             const centerData = {
                 name: name,
