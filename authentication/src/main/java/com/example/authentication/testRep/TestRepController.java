@@ -2,6 +2,9 @@ package com.example.authentication.testRep;
 
 import com.example.authentication.student.Student;
 import com.netflix.discovery.EurekaClient;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -51,6 +54,20 @@ public class TestRepController {
         }
         return 0;
         //return "Login failed";
+    }
+    @PostMapping("/add")
+    public ResponseEntity<String> maketestrep(@RequestBody TestRep testRep) {
+        try {
+            // Insert the TestRep document
+            testRepRepository.insert(testRep);
+            String courseServiceUrl = eurekaClient.getNextServerFromEureka("testrep-service", false).getHomePageUrl();
+            HttpEntity<TestRep > request = new HttpEntity<>(testRep);
+            restTemplate.postForObject(courseServiceUrl+"/Center/add",request, String.class);
+            return ResponseEntity.status(HttpStatus.CREATED).body("TestRep document created successfully.");
+        } catch (Exception e) {
+            // Handle exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create TestRep document: " + e.getMessage());
+        }
     }
 
 
