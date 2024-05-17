@@ -174,16 +174,17 @@ public class TestRepController {
 
     //view exams
     @GetMapping("/exams/{testRepId}")
-    public List<Exam> getExams(@PathVariable("testRepId") String testRepId ) {
+    public List<Exam> getExams(@PathVariable("testRepId") String testRepId ){
         Optional<TestRep> optionalTestRep = testRepRepository.findById(testRepId);
-        if (optionalTestRep.isPresent()) {
+        if(optionalTestRep.isPresent()){
             TestRep testRep = optionalTestRep.get();
             List<Exam> exams = examRepository.findByCid(testRep.getCenter().getId());
             return exams;
 
 
         }
-    }
+        return null;
+}
     // view students grades of exams
     @GetMapping("/grades/{examId}")
     public List<Integer> getGrades(@PathVariable("examId") String examId){
@@ -207,4 +208,4 @@ public class TestRepController {
 
 
 
-}
+
