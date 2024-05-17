@@ -57,7 +57,7 @@ public class CoursesController {
             return courseService.findCategory(category);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/sorted")
     public List<Course> sortByRating(){
         return  courseService.getCoursesByRating();
 

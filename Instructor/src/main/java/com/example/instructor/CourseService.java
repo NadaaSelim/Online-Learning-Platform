@@ -101,7 +101,7 @@ public class CourseService {
 
     public List<Course> getCoursesByRating(){
         String courseServiceUrl = eurekaClient.getNextServerFromEureka("CourseManagement", false).getHomePageUrl();
-        return restTemplate.exchange(courseServiceUrl + "/api/courses/all",
+        return restTemplate.exchange(courseServiceUrl + "/api/courses/sorted",
                 HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Course>>() {}).getBody();
 
