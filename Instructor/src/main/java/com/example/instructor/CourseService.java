@@ -79,7 +79,7 @@ public class CourseService {
         // Use RestTemplate with the resolved service URL
         HttpEntity<Course> request = new HttpEntity<>(course);
         return  restTemplate
-                .exchange(courseServiceUrl + "/api/courses/add", HttpMethod.POST, request, new ParameterizedTypeReference<Course>() {}).getBody();
+                .postForObject(courseServiceUrl + "/api/courses/add",  request, Course.class);
 
     }
 
