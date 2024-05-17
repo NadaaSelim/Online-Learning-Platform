@@ -234,6 +234,12 @@ public class TestRepController {
         return grades;
     }
 
+    @GetMapping("/exams")
+    public List<Exam>  getExamsForStudents(){
+
+        return  examRepository.findAll();
+
+    }
 }
 
     //@PutMapping("/register/{")
