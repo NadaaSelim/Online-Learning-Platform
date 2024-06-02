@@ -3,7 +3,7 @@
 <h2>Overview</h2>
 This project is an Online Learning Platform designed to facilitate course management and student engagement in microservice architecure. The system accommodates administrators, instructors, students, and test center representatives, each with specific functionalities tailored to their roles.
 
-<h2>Stack</h2>
+<h2>Technologies</h2>
 <b>Backend:</b> Java Spring/Java EE<br>
 <b>Database</b>: MongoDB<br>
 <b>Messaging</b>: Kafka<br>
